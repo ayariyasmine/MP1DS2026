@@ -8,29 +8,35 @@
 </head>
 <body>
 
-    <h2>Consommation STEG - Den Den</h2>
-    <div id="tableau">Chargement...</div>
+<h2>Consommation STEG - Den Den</h2>
+<div id="tableau">La page HTML fonctionne.</div>
 
-    <script>
-        fetch("./Consommation-STEG-DenDen.xlsx")
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Fichier Excel introuvable. Vérifie son emplacement.");
-            }
-            return response.arrayBuffer();
-        })
-        .then(data => {
-            const workbook = XLSX.read(data, { type: "array" });
-            const sheet = workbook.Sheets[workbook.SheetNames[0]];
+<script>
+async function afficherExcel() {
+    const resultat = document.getElementById("tableau");
 
-            document.getElementById("tableau").innerHTML =
-                XLSX.utils.sheet_to_html(sheet);
-        })
-        .catch(error => {
-            document.getElementById("tableau").textContent = error.message;
-        });
-    </script>
+    try {
+        resultat.textContent = "Chargement du fichier Excel...";
+
+        const reponse = await fetch("./Consommation-STEG-DenDen.xlsx");
+
+        if (!reponse.ok) {
+            throw new Error("Fichier Excel introuvable (erreur " + reponse.status + ").");
+        }
+
+        const donnees = await reponse.arrayBuffer();
+        const classeur = XLSX.read(donnees, { type: "array" });
+        const feuille = classeur.Sheets[classeur.SheetNames[0]];
+
+        resultat.innerHTML = XLSX.utils.sheet_to_html(feuille);
+
+    } catch (erreur) {
+        resultat.textContent = "Erreur : " + erreur.message;
+    }
+}
+
+afficherExcel();
+</script>
 
 </body>
 </html>
-
