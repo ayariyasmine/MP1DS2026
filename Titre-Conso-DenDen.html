@@ -1,6 +1,33 @@
+
 <!DOCTYPE html>
-<html lang="fr"> <head>
-<meta charset="UTF-8">
-<title>DenDen </title>
-</head> <body> <p> consommation DenDen</p> 
-</body> </html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Tableau de consommation</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+
+    <h2>Tableau de consommation - Den Den</h2>
+
+    <div id="tableau">Chargement...</div>
+
+    <script>
+        fetch('./Consommation-STEG-DenDen.xlsx')
+            .then(response => response.arrayBuffer())
+            .then(data => {
+                const workbook = XLSX.read(data, { type: 'array' });
+                const feuille = workbook.Sheets[workbook.SheetNames[0]];
+
+                document.getElementById('tableau').innerHTML =
+                    XLSX.utils.sheet_to_html(feuille);
+            })
+            .catch(() => {
+                document.getElementById('tableau').textContent =
+                    "Erreur lors du chargement du fichier Excel.";
+            });
+    </script>
+
+</body>
+</html>
