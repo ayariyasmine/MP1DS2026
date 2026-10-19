@@ -1,32 +1,26 @@
 
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Tableau de consommation</title>
-
-    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <title>Consommation Den Den</title>
 </head>
 <body>
 
-    <h2>Tableau de consommation - Den Den</h2>
+    <h2>Tableau de consommation</h2>
 
-    <div id="tableau">Chargement...</div>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+    <div id="tableau"></div>
 
     <script>
-        fetch('./Consommation-STEG-DenDen.xlsx')
-            .then(response => response.arrayBuffer())
-            .then(data => {
-                const workbook = XLSX.read(data, { type: 'array' });
-                const feuille = workbook.Sheets[workbook.SheetNames[0]];
-
-                document.getElementById('tableau').innerHTML =
-                    XLSX.utils.sheet_to_html(feuille);
-            })
-            .catch(() => {
-                document.getElementById('tableau').textContent =
-                    "Erreur lors du chargement du fichier Excel.";
-            });
+        fetch("Consommation-STEG-DenDen.xlsx")
+        .then(r => r.arrayBuffer())
+        .then(data => {
+            let wb = XLSX.read(data, {type: "array"});
+            let ws = wb.Sheets[wb.SheetNames[0]];
+            document.getElementById("tableau").innerHTML =
+                XLSX.utils.sheet_to_html(ws);
+        });
     </script>
 
 </body>
